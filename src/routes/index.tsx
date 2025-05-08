@@ -6,10 +6,17 @@ import InputText from "../components/input-text";
 
 export const Route = createFileRoute("/")({
   component: App,
+  validateSearch: (search) => {
+    return {
+      text1: search.text1 as string | undefined,
+      text2: search.text2 as string | undefined,
+    };
+  },
 });
 
 const machine = setup({
   types: {
+    input: {} as { text1: string | undefined; text2: string | undefined },
     context: {} as {
       text1: ActorRefFrom<typeof InputTextActor.actor>;
       text2: ActorRefFrom<typeof InputTextActor.actor>;
@@ -17,12 +24,12 @@ const machine = setup({
     events: {} as { type: "submit"; formData: FormData },
   },
 }).createMachine({
-  context: ({ spawn }) => ({
+  context: ({ spawn, input }) => ({
     text1: spawn(InputTextActor.actor, {
-      input: { defaultValue: "Hello" },
+      input: { defaultValue: input.text1 },
     }),
     text2: spawn(InputTextActor.actor, {
-      input: { defaultValue: "World" },
+      input: { defaultValue: input.text2 },
     }),
   }),
   on: {
@@ -35,7 +42,10 @@ const machine = setup({
 });
 
 function App() {
-  const [snapshot, send] = useMachine(machine);
+  const { text1, text2 } = Route.useSearch();
+  const [snapshot, send] = useMachine(machine, {
+    input: { text1, text2 },
+  });
   return (
     <form action={(formData) => send({ type: "submit", formData })}>
       <InputText name="text1" actor={snapshot.context.text1} />
