@@ -11,9 +11,44 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WithValueImport } from './routes/with-value'
+import { Route as WithRefImport } from './routes/with-ref'
+import { Route as SendToImport } from './routes/send-to'
+import { Route as ReceptionistImport } from './routes/receptionist'
+import { Route as ParentRefImport } from './routes/parent-ref'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const WithValueRoute = WithValueImport.update({
+  id: '/with-value',
+  path: '/with-value',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WithRefRoute = WithRefImport.update({
+  id: '/with-ref',
+  path: '/with-ref',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SendToRoute = SendToImport.update({
+  id: '/send-to',
+  path: '/send-to',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ReceptionistRoute = ReceptionistImport.update({
+  id: '/receptionist',
+  path: '/receptionist',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ParentRefRoute = ParentRefImport.update({
+  id: '/parent-ref',
+  path: '/parent-ref',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +67,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/parent-ref': {
+      id: '/parent-ref'
+      path: '/parent-ref'
+      fullPath: '/parent-ref'
+      preLoaderRoute: typeof ParentRefImport
+      parentRoute: typeof rootRoute
+    }
+    '/receptionist': {
+      id: '/receptionist'
+      path: '/receptionist'
+      fullPath: '/receptionist'
+      preLoaderRoute: typeof ReceptionistImport
+      parentRoute: typeof rootRoute
+    }
+    '/send-to': {
+      id: '/send-to'
+      path: '/send-to'
+      fullPath: '/send-to'
+      preLoaderRoute: typeof SendToImport
+      parentRoute: typeof rootRoute
+    }
+    '/with-ref': {
+      id: '/with-ref'
+      path: '/with-ref'
+      fullPath: '/with-ref'
+      preLoaderRoute: typeof WithRefImport
+      parentRoute: typeof rootRoute
+    }
+    '/with-value': {
+      id: '/with-value'
+      path: '/with-value'
+      fullPath: '/with-value'
+      preLoaderRoute: typeof WithValueImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +109,76 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/parent-ref': typeof ParentRefRoute
+  '/receptionist': typeof ReceptionistRoute
+  '/send-to': typeof SendToRoute
+  '/with-ref': typeof WithRefRoute
+  '/with-value': typeof WithValueRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/parent-ref': typeof ParentRefRoute
+  '/receptionist': typeof ReceptionistRoute
+  '/send-to': typeof SendToRoute
+  '/with-ref': typeof WithRefRoute
+  '/with-value': typeof WithValueRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/parent-ref': typeof ParentRefRoute
+  '/receptionist': typeof ReceptionistRoute
+  '/send-to': typeof SendToRoute
+  '/with-ref': typeof WithRefRoute
+  '/with-value': typeof WithValueRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/parent-ref'
+    | '/receptionist'
+    | '/send-to'
+    | '/with-ref'
+    | '/with-value'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/parent-ref'
+    | '/receptionist'
+    | '/send-to'
+    | '/with-ref'
+    | '/with-value'
+  id:
+    | '__root__'
+    | '/'
+    | '/parent-ref'
+    | '/receptionist'
+    | '/send-to'
+    | '/with-ref'
+    | '/with-value'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ParentRefRoute: typeof ParentRefRoute
+  ReceptionistRoute: typeof ReceptionistRoute
+  SendToRoute: typeof SendToRoute
+  WithRefRoute: typeof WithRefRoute
+  WithValueRoute: typeof WithValueRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ParentRefRoute: ParentRefRoute,
+  ReceptionistRoute: ReceptionistRoute,
+  SendToRoute: SendToRoute,
+  WithRefRoute: WithRefRoute,
+  WithValueRoute: WithValueRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +191,31 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/parent-ref",
+        "/receptionist",
+        "/send-to",
+        "/with-ref",
+        "/with-value"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/parent-ref": {
+      "filePath": "parent-ref.tsx"
+    },
+    "/receptionist": {
+      "filePath": "receptionist.tsx"
+    },
+    "/send-to": {
+      "filePath": "send-to.tsx"
+    },
+    "/with-ref": {
+      "filePath": "with-ref.tsx"
+    },
+    "/with-value": {
+      "filePath": "with-value.tsx"
     }
   }
 }
