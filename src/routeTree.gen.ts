@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as WithValueImport } from './routes/with-value'
 import { Route as WithRefImport } from './routes/with-ref'
 import { Route as SendToImport } from './routes/send-to'
-import { Route as ReceptionistImport } from './routes/receptionist'
+import { Route as SendParentImport } from './routes/send-parent'
 import { Route as NoActorsImport } from './routes/no-actors'
 import { Route as InvokeImport } from './routes/invoke'
 import { Route as IndexImport } from './routes/index'
@@ -39,9 +39,9 @@ const SendToRoute = SendToImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ReceptionistRoute = ReceptionistImport.update({
-  id: '/receptionist',
-  path: '/receptionist',
+const SendParentRoute = SendParentImport.update({
+  id: '/send-parent',
+  path: '/send-parent',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,11 +88,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoActorsImport
       parentRoute: typeof rootRoute
     }
-    '/receptionist': {
-      id: '/receptionist'
-      path: '/receptionist'
-      fullPath: '/receptionist'
-      preLoaderRoute: typeof ReceptionistImport
+    '/send-parent': {
+      id: '/send-parent'
+      path: '/send-parent'
+      fullPath: '/send-parent'
+      preLoaderRoute: typeof SendParentImport
       parentRoute: typeof rootRoute
     }
     '/send-to': {
@@ -125,7 +125,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/invoke': typeof InvokeRoute
   '/no-actors': typeof NoActorsRoute
-  '/receptionist': typeof ReceptionistRoute
+  '/send-parent': typeof SendParentRoute
   '/send-to': typeof SendToRoute
   '/with-ref': typeof WithRefRoute
   '/with-value': typeof WithValueRoute
@@ -135,7 +135,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/invoke': typeof InvokeRoute
   '/no-actors': typeof NoActorsRoute
-  '/receptionist': typeof ReceptionistRoute
+  '/send-parent': typeof SendParentRoute
   '/send-to': typeof SendToRoute
   '/with-ref': typeof WithRefRoute
   '/with-value': typeof WithValueRoute
@@ -146,7 +146,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/invoke': typeof InvokeRoute
   '/no-actors': typeof NoActorsRoute
-  '/receptionist': typeof ReceptionistRoute
+  '/send-parent': typeof SendParentRoute
   '/send-to': typeof SendToRoute
   '/with-ref': typeof WithRefRoute
   '/with-value': typeof WithValueRoute
@@ -158,7 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/invoke'
     | '/no-actors'
-    | '/receptionist'
+    | '/send-parent'
     | '/send-to'
     | '/with-ref'
     | '/with-value'
@@ -167,7 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/invoke'
     | '/no-actors'
-    | '/receptionist'
+    | '/send-parent'
     | '/send-to'
     | '/with-ref'
     | '/with-value'
@@ -176,7 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/invoke'
     | '/no-actors'
-    | '/receptionist'
+    | '/send-parent'
     | '/send-to'
     | '/with-ref'
     | '/with-value'
@@ -187,7 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InvokeRoute: typeof InvokeRoute
   NoActorsRoute: typeof NoActorsRoute
-  ReceptionistRoute: typeof ReceptionistRoute
+  SendParentRoute: typeof SendParentRoute
   SendToRoute: typeof SendToRoute
   WithRefRoute: typeof WithRefRoute
   WithValueRoute: typeof WithValueRoute
@@ -197,7 +197,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InvokeRoute: InvokeRoute,
   NoActorsRoute: NoActorsRoute,
-  ReceptionistRoute: ReceptionistRoute,
+  SendParentRoute: SendParentRoute,
   SendToRoute: SendToRoute,
   WithRefRoute: WithRefRoute,
   WithValueRoute: WithValueRoute,
@@ -216,7 +216,7 @@ export const routeTree = rootRoute
         "/",
         "/invoke",
         "/no-actors",
-        "/receptionist",
+        "/send-parent",
         "/send-to",
         "/with-ref",
         "/with-value"
@@ -231,8 +231,8 @@ export const routeTree = rootRoute
     "/no-actors": {
       "filePath": "no-actors.tsx"
     },
-    "/receptionist": {
-      "filePath": "receptionist.tsx"
+    "/send-parent": {
+      "filePath": "send-parent.tsx"
     },
     "/send-to": {
       "filePath": "send-to.tsx"

@@ -1,19 +1,13 @@
-import { assertEvent, assign, setup, type ActorRefFrom } from "xstate";
+import { assign, forwardTo, setup, type ActorRefFrom } from "xstate";
 import * as InputTextActor from "../actors/input-text";
 
-/**
- * Values and logic all stored inside parent.
- *
- * Child receives `onChange` and `text` value directly.
- */
 export const actorWithValue = setup({
   types: {
-    input: {} as { text: string | undefined },
     context: {} as { text: string },
     events: {} as { type: "change"; value: string } | { type: "submit" },
   },
 }).createMachine({
-  context: ({ input }) => ({ text: input.text ?? "" }),
+  context: { text: "" },
   on: {
     change: {
       actions: assign(({ event }) => ({ text: event.value })),
@@ -26,25 +20,19 @@ export const actorWithValue = setup({
   },
 });
 
-/**
- * Provide reference to `self` to child actor.
- *
- * Child shares `ActorParentRefEvent` and `text` with parent (`sendTo`).
- */
 export const actorSendTo = setup({
   types: {
-    input: {} as { text: string | undefined },
     context: {} as {
       text: string;
       textActor: ActorRefFrom<typeof InputTextActor.actorSendTo>;
     },
-    events: {} as { type: "submit" } | InputTextActor.ActorSendToEvent,
+    events: {} as { type: "submit" } | { type: "change"; value: string },
   },
 }).createMachine({
-  context: ({ spawn, input, self }) => ({
+  context: ({ spawn, self }) => ({
     text: "",
     textActor: spawn(InputTextActor.actorSendTo, {
-      input: { defaultValue: input.text, parentRef: self },
+      input: { parentRef: self },
     }),
   }),
   on: {
@@ -59,24 +47,16 @@ export const actorSendTo = setup({
   },
 });
 
-/**
- * Reference to child actor inside `context`.
- *
- * Access value from `FromData` on submit *or* directly from child snapshot.
- */
 export const actorWithRef = setup({
   types: {
-    input: {} as { text: string | undefined },
     context: {} as {
       textActor: ActorRefFrom<typeof InputTextActor.actorIndependent>;
     },
     events: {} as { type: "submit"; formData: FormData },
   },
 }).createMachine({
-  context: ({ spawn, input }) => ({
-    textActor: spawn(InputTextActor.actorIndependent, {
-      input: { defaultValue: input.text },
-    }),
+  context: ({ spawn }) => ({
+    textActor: spawn(InputTextActor.actorIndependent),
   }),
   on: {
     submit: {
@@ -88,18 +68,9 @@ export const actorWithRef = setup({
   },
 });
 
-/**
- * No reference to child actor inside `context`.
- *
- * Child actor is invoked with `invoke` in the root of the machine.
- */
-type InputInvoke = { text: string | undefined };
 export const actorInvoke = setup({
   types: {
-    input: {} as InputInvoke,
-    events: {} as
-      | { type: "submit" }
-      | { type: "xstate.init"; input: InputInvoke },
+    events: {} as { type: "submit" },
     children: {} as { textActor: "textActor" },
   },
   actors: { textActor: InputTextActor.actorIndependent },
@@ -107,10 +78,6 @@ export const actorInvoke = setup({
   invoke: {
     id: "textActor",
     src: "textActor",
-    input: ({ event }) => {
-      assertEvent(event, "xstate.init");
-      return { defaultValue: event.input.text };
-    },
   },
   on: {
     submit: {
@@ -121,41 +88,31 @@ export const actorInvoke = setup({
   },
 });
 
-/**
- * Child actor is independent, no reference to parent.
- *
- * Shared event with child `sendTo` using parent `id` and `system`.
- */
-export const actorReceptionist = setup({
+export const actorSendParent = setup({
   types: {
-    input: {} as { text: string | undefined },
     context: {} as { text: string },
-    events: {} as
-      | { type: "submit" }
-      | { type: "xstate.init"; input: { text: string | undefined } }
-      | InputTextActor.ActorReceptionistEvent,
-    children: {} as { textActor: "textActor" },
-  },
-  actors: { textActor: InputTextActor.actorReceptionist },
-}).createMachine({
-  id: "form",
-  context: ({ input }) => ({ text: input.text ?? "" }),
-  invoke: {
-    id: "textActor",
-    src: "textActor",
-    input: ({ event }) => {
-      assertEvent(event, "xstate.init");
-      return { defaultValue: event.input.text };
+    events: {} as { type: "submit" } | { type: "change"; value: string },
+    children: {} as {
+      textActorId: "textActorSrc";
     },
   },
+  actors: {
+    textActorSrc: InputTextActor.actorSendParent,
+  },
+}).createMachine({
+  context: { text: "" },
+  invoke: { id: "textActorId", src: "textActorSrc" },
   on: {
     change: {
       actions: assign(({ event }) => ({ text: event.value })),
     },
     submit: {
-      actions: ({ context }) => {
-        console.log({ text: context.text });
-      },
+      actions: [
+        ({ context }) => {
+          console.log({ text: context.text });
+        },
+        forwardTo("textActorId"),
+      ],
     },
   },
 });

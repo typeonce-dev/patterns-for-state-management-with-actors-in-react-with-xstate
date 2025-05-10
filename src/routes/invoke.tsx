@@ -3,19 +3,10 @@ import { useActor } from "@xstate/react";
 import * as FormActor from "../actors/form";
 import { InputTextInvoke } from "../components/input-text";
 
-export const Route = createFileRoute("/invoke")({
-  component: App,
-  validateSearch: (search) => {
-    return { text: search.text as string | undefined };
-  },
-});
+export const Route = createFileRoute("/invoke")({ component: App });
 
 function App() {
-  const { text } = Route.useSearch();
-  const [snapshot, send] = useActor(FormActor.actorInvoke, {
-    input: { text },
-  });
-
+  const [snapshot, send] = useActor(FormActor.actorInvoke);
   return (
     <form action={() => send({ type: "submit" })}>
       {snapshot.children.textActor && (

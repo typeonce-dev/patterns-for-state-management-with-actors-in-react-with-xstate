@@ -7,24 +7,11 @@ export const Route = createFileRoute("/")({
 function App() {
   return (
     <nav style={{ display: "flex", gap: "1rem" }}>
-      <Link to="/with-value" search={{ text: "value" }}>
-        With Value
-      </Link>
-      <Link to="/with-ref" search={{ text: "ref" }}>
-        With Ref
-      </Link>
-      <Link to="/send-to" search={{ text: "send-to" }}>
-        Send To
-      </Link>
-      <Link to="/invoke" search={{ text: "invoke" }}>
-        Invoke
-      </Link>
-      <Link to="/receptionist" search={{ text: "receptionist" }}>
-        Receptionist
-      </Link>
-      <Link to="/no-actors" search={{ text: "no-actors" }}>
-        No Actors
-      </Link>
+      <Link to="/with-value">With Value</Link>
+      <Link to="/with-ref">With Ref</Link>
+      <Link to="/send-to">Send To</Link>
+      <Link to="/invoke">Invoke</Link>
+      <Link to="/send-parent">Send Parent</Link>
     </nav>
   );
 }

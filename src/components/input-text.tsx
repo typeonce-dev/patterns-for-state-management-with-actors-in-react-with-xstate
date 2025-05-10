@@ -1,4 +1,4 @@
-import { useActor, useSelector } from "@xstate/react";
+import { useSelector } from "@xstate/react";
 import type { ActorRefFrom, SnapshotFrom } from "xstate";
 import * as FormActor from "../actors/form";
 import * as InputTextActor from "../actors/input-text";
@@ -97,20 +97,18 @@ const InputTextInvoke = ({
 
 const InputTextReceptionist = ({
   name,
-  defaultValue,
+  actor,
 }: {
   name: string;
-  defaultValue: string | undefined;
+  actor: ActorRefFrom<typeof InputTextActor.actorSendParent>;
 }) => {
-  const [snapshot, send] = useActor(InputTextActor.actorReceptionist, {
-    input: { defaultValue },
-  });
+  const value = useSelector(actor, (snapshot) => snapshot.context.value);
   return (
     <input
       type="text"
       name={name}
-      value={snapshot.context.value}
-      onChange={(e) => send({ type: "change", value: e.target.value })}
+      value={value}
+      onChange={(e) => actor.send({ type: "change", value: e.target.value })}
     />
   );
 };

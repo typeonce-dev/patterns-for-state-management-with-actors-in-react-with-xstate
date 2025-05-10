@@ -3,19 +3,10 @@ import { useActor } from "@xstate/react";
 import * as FormActor from "../actors/form";
 import { InputText, InputTextSharedMachine } from "../components/input-text";
 
-export const Route = createFileRoute("/with-value")({
-  component: App,
-  validateSearch: (search) => {
-    return { text: search.text as string | undefined };
-  },
-});
+export const Route = createFileRoute("/with-value")({ component: App });
 
 function App() {
-  const { text } = Route.useSearch();
-  const [snapshot, send] = useActor(FormActor.actorWithValue, {
-    input: { text },
-  });
-
+  const [snapshot, send] = useActor(FormActor.actorWithValue);
   return (
     <>
       <form action={() => send({ type: "submit" })}>
