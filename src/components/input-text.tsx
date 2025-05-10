@@ -46,7 +46,7 @@ const InputTextWithActor = ({
   actor,
 }: {
   name: string;
-  actor: ActorRefFrom<typeof InputTextActor.actorShared>;
+  actor: ActorRefFrom<typeof InputTextActor.actorIndependent>;
 }) => {
   const value = useSelector(actor, (snapshot) => snapshot.context.value);
   return (
@@ -95,6 +95,24 @@ const InputTextParentRef = ({
   );
 };
 
+const InputTextInvoke = ({
+  name,
+  actor,
+}: {
+  name: string;
+  actor: ActorRefFrom<typeof InputTextActor.actorIndependent>;
+}) => {
+  const value = useSelector(actor, (snapshot) => snapshot.context.value);
+  return (
+    <input
+      type="text"
+      name={name}
+      value={value}
+      onChange={(e) => actor.send({ type: "change", value: e.target.value })}
+    />
+  );
+};
+
 const InputTextReceptionist = ({
   name,
   actor,
@@ -115,6 +133,7 @@ const InputTextReceptionist = ({
 
 export {
   InputText,
+  InputTextInvoke,
   InputTextParentRef,
   InputTextReceptionist,
   InputTextSendTo,

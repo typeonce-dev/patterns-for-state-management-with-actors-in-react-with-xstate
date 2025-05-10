@@ -1,29 +1,63 @@
-import { assign, setup, type ActorRefFrom } from "xstate";
+import { assertEvent, assign, setup, type ActorRefFrom } from "xstate";
 import * as InputTextActor from "../actors/input-text";
 
 /**
  * Reference to child actor inside `context`.
  *
- * Access value from `FromData` on submit.
+ * Access value from `FromData` on submit *or* directly from child snapshot.
  */
 export const actorWithRef = setup({
   types: {
     input: {} as { text: string | undefined },
     context: {} as {
-      textActor: ActorRefFrom<typeof InputTextActor.actorShared>;
+      textActor: ActorRefFrom<typeof InputTextActor.actorIndependent>;
     },
     events: {} as { type: "submit"; formData: FormData },
   },
 }).createMachine({
   context: ({ spawn, input }) => ({
-    textActor: spawn(InputTextActor.actorShared, {
+    textActor: spawn(InputTextActor.actorIndependent, {
       input: { defaultValue: input.text },
     }),
   }),
   on: {
     submit: {
-      actions: ({ event }) => {
+      actions: ({ event, context }) => {
         console.log({ text: event.formData.get("text") });
+        console.log({ text: context.textActor.getSnapshot().context.value });
+      },
+    },
+  },
+});
+
+/**
+ * No reference to child actor inside `context`.
+ *
+ * Child actor is invoked with `invoke` in the root of the machine.
+ */
+type InputInvoke = { text: string | undefined };
+export const actorInvoke = setup({
+  types: {
+    input: {} as InputInvoke,
+    events: {} as
+      | { type: "submit" }
+      | { type: "xstate.init"; input: InputInvoke },
+    children: {} as { textActor: "textActor" },
+  },
+  actors: { textActor: InputTextActor.actorIndependent },
+}).createMachine({
+  invoke: {
+    id: "textActor",
+    src: "textActor",
+    input: ({ event }) => {
+      assertEvent(event, "xstate.init");
+      return { defaultValue: event.input.text };
+    },
+  },
+  on: {
+    submit: {
+      actions: ({ context }) => {
+        console.log({ text: context.textActor.getSnapshot().context.value });
       },
     },
   },

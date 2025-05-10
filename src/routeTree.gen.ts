@@ -16,6 +16,7 @@ import { Route as WithRefImport } from './routes/with-ref'
 import { Route as SendToImport } from './routes/send-to'
 import { Route as ReceptionistImport } from './routes/receptionist'
 import { Route as ParentRefImport } from './routes/parent-ref'
+import { Route as InvokeImport } from './routes/invoke'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -50,6 +51,12 @@ const ParentRefRoute = ParentRefImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const InvokeRoute = InvokeImport.update({
+  id: '/invoke',
+  path: '/invoke',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -65,6 +72,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/invoke': {
+      id: '/invoke'
+      path: '/invoke'
+      fullPath: '/invoke'
+      preLoaderRoute: typeof InvokeImport
       parentRoute: typeof rootRoute
     }
     '/parent-ref': {
@@ -109,6 +123,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/invoke': typeof InvokeRoute
   '/parent-ref': typeof ParentRefRoute
   '/receptionist': typeof ReceptionistRoute
   '/send-to': typeof SendToRoute
@@ -118,6 +133,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/invoke': typeof InvokeRoute
   '/parent-ref': typeof ParentRefRoute
   '/receptionist': typeof ReceptionistRoute
   '/send-to': typeof SendToRoute
@@ -128,6 +144,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/invoke': typeof InvokeRoute
   '/parent-ref': typeof ParentRefRoute
   '/receptionist': typeof ReceptionistRoute
   '/send-to': typeof SendToRoute
@@ -139,6 +156,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/invoke'
     | '/parent-ref'
     | '/receptionist'
     | '/send-to'
@@ -147,6 +165,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/invoke'
     | '/parent-ref'
     | '/receptionist'
     | '/send-to'
@@ -155,6 +174,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/invoke'
     | '/parent-ref'
     | '/receptionist'
     | '/send-to'
@@ -165,6 +185,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InvokeRoute: typeof InvokeRoute
   ParentRefRoute: typeof ParentRefRoute
   ReceptionistRoute: typeof ReceptionistRoute
   SendToRoute: typeof SendToRoute
@@ -174,6 +195,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InvokeRoute: InvokeRoute,
   ParentRefRoute: ParentRefRoute,
   ReceptionistRoute: ReceptionistRoute,
   SendToRoute: SendToRoute,
@@ -192,6 +214,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/invoke",
         "/parent-ref",
         "/receptionist",
         "/send-to",
@@ -201,6 +224,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/invoke": {
+      "filePath": "invoke.tsx"
     },
     "/parent-ref": {
       "filePath": "parent-ref.tsx"

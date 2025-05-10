@@ -3,7 +3,7 @@ import { assign, sendTo, setup, type AnyActorRef } from "xstate";
 /**
  * Independent actor, no reference to parent, isolated logic.
  */
-export const actorShared = setup({
+export const actorIndependent = setup({
   types: {
     input: {} as { defaultValue: string | undefined },
     context: {} as { value: string },
