@@ -9,8 +9,8 @@ function App() {
   const [snapshot, send] = useActor(FormActor.actorInvoke);
   return (
     <form action={() => send({ type: "submit" })}>
-      {snapshot.children.textActor && (
-        <InputTextInvoke name="text" actor={snapshot.children.textActor} />
+      {snapshot.children.textActorId && (
+        <InputTextInvoke name="text" actor={snapshot.children.textActorId} />
       )}
       <button type="submit">Submit</button>
     </form>

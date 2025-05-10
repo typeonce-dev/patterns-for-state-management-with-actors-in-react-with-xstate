@@ -95,7 +95,7 @@ const InputTextInvoke = ({
   );
 };
 
-const InputTextReceptionist = ({
+const InputTextSendParent = ({
   name,
   actor,
 }: {
@@ -116,7 +116,7 @@ const InputTextReceptionist = ({
 export {
   InputText,
   InputTextInvoke,
-  InputTextReceptionist,
+  InputTextSendParent,
   InputTextSendTo,
   InputTextSharedMachine,
   InputTextWithActor,

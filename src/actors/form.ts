@@ -71,13 +71,15 @@ export const actorWithRef = setup({
 export const actorInvoke = setup({
   types: {
     events: {} as { type: "submit" },
-    children: {} as { textActor: "textActor" },
+    children: {} as {
+      textActorId: "textActorSrc";
+    },
   },
-  actors: { textActor: InputTextActor.actorIndependent },
+  actors: { textActorSrc: InputTextActor.actorIndependent },
 }).createMachine({
   invoke: {
-    id: "textActor",
-    src: "textActor",
+    id: "textActorId",
+    src: "textActorSrc",
   },
   on: {
     submit: {
