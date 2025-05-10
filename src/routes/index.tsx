@@ -22,6 +22,9 @@ function App() {
       <Link to="/receptionist" search={{ text: "receptionist" }}>
         Receptionist
       </Link>
+      <Link to="/no-actors" search={{ text: "no-actors" }}>
+        No Actors
+      </Link>
     </nav>
   );
 }

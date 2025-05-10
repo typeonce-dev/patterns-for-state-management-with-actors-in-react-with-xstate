@@ -129,20 +129,25 @@ export const actorInvoke = setup({
 export const actorReceptionist = setup({
   types: {
     input: {} as { text: string | undefined },
-    context: {} as {
-      text: string;
-      textActor: ActorRefFrom<typeof InputTextActor.actorReceptionist>;
-    },
-    events: {} as { type: "submit" } | InputTextActor.ActorReceptionistEvent,
+    context: {} as { text: string },
+    events: {} as
+      | { type: "submit" }
+      | { type: "xstate.init"; input: { text: string | undefined } }
+      | InputTextActor.ActorReceptionistEvent,
+    children: {} as { textActor: "textActor" },
   },
+  actors: { textActor: InputTextActor.actorReceptionist },
 }).createMachine({
   id: "form",
-  context: ({ spawn, input }) => ({
-    text: "",
-    textActor: spawn(InputTextActor.actorReceptionist, {
-      input: { defaultValue: input.text },
-    }),
-  }),
+  context: ({ input }) => ({ text: input.text ?? "" }),
+  invoke: {
+    id: "textActor",
+    src: "textActor",
+    input: ({ event }) => {
+      assertEvent(event, "xstate.init");
+      return { defaultValue: event.input.text };
+    },
+  },
   on: {
     change: {
       actions: assign(({ event }) => ({ text: event.value })),

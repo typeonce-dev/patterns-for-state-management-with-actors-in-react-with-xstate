@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMachine } from "@xstate/react";
+import { useActor } from "@xstate/react";
 import * as FormActor from "../actors/form";
 import { InputTextSendTo } from "../components/input-text";
 
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/send-to")({
 
 function App() {
   const { text } = Route.useSearch();
-  const [snapshot, send] = useMachine(FormActor.actorSendTo, {
+  const [snapshot, send] = useActor(FormActor.actorSendTo, {
     input: { text },
   });
 

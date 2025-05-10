@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMachine } from "@xstate/react";
+import { useActorRef } from "@xstate/react";
 import * as FormActor from "../actors/form";
 import { InputTextReceptionist } from "../components/input-text";
 
@@ -12,13 +12,13 @@ export const Route = createFileRoute("/receptionist")({
 
 function App() {
   const { text } = Route.useSearch();
-  const [snapshot, send] = useMachine(FormActor.actorReceptionist, {
+  const actor = useActorRef(FormActor.actorReceptionist, {
     input: { text },
   });
 
   return (
-    <form action={() => send({ type: "submit" })}>
-      <InputTextReceptionist name="text" actor={snapshot.context.textActor} />
+    <form action={() => actor.send({ type: "submit" })}>
+      <InputTextReceptionist name="text" defaultValue={text} />
       <button type="submit">Submit</button>
     </form>
   );
