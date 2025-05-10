@@ -41,48 +41,30 @@ const InputTextSharedMachine = ({
   );
 };
 
+const InputTextSendTo = ({
+  name,
+  actor,
+}: {
+  name: string;
+  actor: ActorRefFrom<typeof InputTextActor.actorSendTo>;
+}) => {
+  const value = useSelector(actor, (snapshot) => snapshot.context.value);
+  return (
+    <input
+      type="text"
+      name={name}
+      value={value}
+      onChange={(e) => actor.send({ type: "change", value: e.target.value })}
+    />
+  );
+};
+
 const InputTextWithActor = ({
   name,
   actor,
 }: {
   name: string;
   actor: ActorRefFrom<typeof InputTextActor.actorIndependent>;
-}) => {
-  const value = useSelector(actor, (snapshot) => snapshot.context.value);
-  return (
-    <input
-      type="text"
-      name={name}
-      value={value}
-      onChange={(e) => actor.send({ type: "change", value: e.target.value })}
-    />
-  );
-};
-
-const InputTextSendTo = ({
-  name,
-  actor,
-}: {
-  name: string;
-  actor: ActorRefFrom<typeof InputTextActor.actorParentRef>;
-}) => {
-  const value = useSelector(actor, (snapshot) => snapshot.context.value);
-  return (
-    <input
-      type="text"
-      name={name}
-      value={value}
-      onChange={(e) => actor.send({ type: "change", value: e.target.value })}
-    />
-  );
-};
-
-const InputTextParentRef = ({
-  name,
-  actor,
-}: {
-  name: string;
-  actor: ActorRefFrom<typeof InputTextActor.actorParentRef>;
 }) => {
   const value = useSelector(actor, (snapshot) => snapshot.context.value);
   return (
@@ -134,7 +116,6 @@ const InputTextReceptionist = ({
 export {
   InputText,
   InputTextInvoke,
-  InputTextParentRef,
   InputTextReceptionist,
   InputTextSendTo,
   InputTextSharedMachine,
