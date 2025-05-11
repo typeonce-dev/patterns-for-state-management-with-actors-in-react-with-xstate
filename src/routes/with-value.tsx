@@ -11,7 +11,6 @@ function App() {
     <>
       <form action={() => send({ type: "submit" })}>
         <InputText
-          name="text"
           value={snapshot.context.text}
           onChange={(value) => send({ type: "change", value })}
         />
@@ -19,7 +18,7 @@ function App() {
       </form>
 
       <form action={() => send({ type: "submit" })}>
-        <InputTextSharedMachine name="text" send={send} snapshot={snapshot} />
+        <InputTextSharedMachine send={send} snapshot={snapshot} />
         <button type="submit">Submit</button>
       </form>
     </>

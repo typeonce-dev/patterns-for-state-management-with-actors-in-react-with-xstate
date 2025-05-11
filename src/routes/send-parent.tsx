@@ -10,10 +10,7 @@ function App() {
   return (
     <form action={() => send({ type: "submit" })}>
       {snapshot.children.textActorId && (
-        <InputTextSendParent
-          name="text"
-          actor={snapshot.children.textActorId}
-        />
+        <InputTextSendParent actor={snapshot.children.textActorId} />
       )}
       <button type="submit">Submit</button>
     </form>

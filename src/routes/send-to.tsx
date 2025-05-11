@@ -9,7 +9,7 @@ function App() {
   const [snapshot, send] = useActor(FormActor.actorSendTo);
   return (
     <form action={() => send({ type: "submit" })}>
-      <InputTextSendTo name="text" actor={snapshot.context.textActor} />
+      <InputTextSendTo actor={snapshot.context.textActor} />
       <button type="submit">Submit</button>
     </form>
   );

@@ -70,7 +70,7 @@ export const actorWithRef = setup({
 
 export const actorInvoke = setup({
   types: {
-    events: {} as { type: "submit" },
+    events: {} as { type: "submit"; formData: FormData },
     children: {} as {
       textActorId: "textActorSrc";
     },
@@ -83,8 +83,10 @@ export const actorInvoke = setup({
   },
   on: {
     submit: {
-      actions: ({ context }) => {
-        console.log({ text: context.textActor.getSnapshot().context.value });
+      actions: ({ event }) => {
+        console.log({
+          text: event.formData.get("text"),
+        });
       },
     },
   },

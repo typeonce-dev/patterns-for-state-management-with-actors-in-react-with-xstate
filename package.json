@@ -6,7 +6,8 @@
     "dev": "vite --port 3000",
     "start": "vite --port 3000",
     "build": "vite build && tsc",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.114.3",

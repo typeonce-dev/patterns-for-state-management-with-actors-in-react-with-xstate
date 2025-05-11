@@ -8,7 +8,7 @@ export const Route = createFileRoute("/invoke")({ component: App });
 function App() {
   const [snapshot, send] = useActor(FormActor.actorInvoke);
   return (
-    <form action={() => send({ type: "submit" })}>
+    <form action={(formData) => send({ type: "submit", formData })}>
       {snapshot.children.textActorId && (
         <InputTextInvoke name="text" actor={snapshot.children.textActorId} />
       )}
